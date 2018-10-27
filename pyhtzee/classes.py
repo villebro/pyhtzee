@@ -1,7 +1,7 @@
 """
 Common classes needed for gameplay
 """
-from enum import IntEnum
+from enum import Enum, IntEnum
 
 
 class Category(IntEnum):
@@ -20,3 +20,9 @@ class Category(IntEnum):
     CHANCE = 12
     UPPER_SECTION_BONUS = 13
     EXTRA_YAHTZEES = 14
+
+
+# TODO: add FORCED_JOKER and ORIGINAL_JOKER
+class Rule(Enum):
+    REGULAR = 0
+    FREE_CHOICE_JOKER = 1

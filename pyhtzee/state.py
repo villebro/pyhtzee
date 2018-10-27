@@ -1,7 +1,7 @@
 from random import Random
 from typing import Dict, Optional
 
-from pyhtzee.classes import Category
+from pyhtzee.classes import Category, Rule
 from pyhtzee.maps import (
     action_to_category_map,
     action_to_dice_roll_map,
@@ -13,8 +13,9 @@ from pyhtzee.scoring import score_upper_section_bonus, score_extra_yahtzee
 
 
 class State:
-    def __init__(self, seed: int = None):
+    def __init__(self, seed: int = None, rule: Rule = None):
         self.scores: Dict[Category, Optional[int]] = {}
+        self.rule = rule if rule else Rule.FREE_CHOICE_JOKER
 
         # a game has a total of 12 rounds
         self.round = 0

@@ -1,4 +1,4 @@
-from gym_yahtzee.scoring import (
+from pyhtzee.scoring import (
     score_extra_yahtzee,
     score_upper_section,
     score_x_of_a_kind,
