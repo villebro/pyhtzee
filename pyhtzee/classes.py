@@ -26,4 +26,4 @@ class Category(IntEnum):
 class Rule(Enum):
     REGULAR = 0
     FREE_CHOICE_JOKER = 1
-    FORCED_CHOICEJONER = 2
+    FORCED_CHOICE_JOKER = 2
