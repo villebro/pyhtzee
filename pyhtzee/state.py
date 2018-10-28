@@ -1,5 +1,5 @@
 from random import Random
-from typing import Dict, List
+from typing import Dict
 
 from pyhtzee.classes import Category, Rule
 from pyhtzee.maps import (
