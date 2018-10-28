@@ -9,12 +9,12 @@ from pyhtzee.maps import (
     category_to_action_map,
     category_to_scoring_function_map,
 )
-from pyhtzee.scoring import score_upper_section_bonus, score_extra_yahtzee
+from pyhtzee.scoring import CONSTANT_SCORES, score_upper_section_bonus
 
 
 class State:
     def __init__(self, seed: int = None, rule: Rule = None):
-        self.scores: Dict[Category, Optional[int]] = {}
+        self.scores: Dict[Category, int] = {}
         self.rule = rule if rule else Rule.FREE_CHOICE_JOKER
 
         # a game has a total of 12 rounds
@@ -91,18 +91,18 @@ class State:
                 self.scores[Category.UPPER_SECTION_BONUS] = bonus_reward
                 reward += bonus_reward
 
-        # extra yahtzee
-        if category != Category.YAHTZEE and self.is_extra_yahtzee():
-            extra_yahtzee_reward = score_extra_yahtzee()
-            reward += extra_yahtzee_reward
-            extra_yahtzee_score = self.scores.get(Category.EXTRA_YAHTZEES)
-            extra_yahtzee_score = extra_yahtzee_score if extra_yahtzee_score else 0
-            self.scores[Category.EXTRA_YAHTZEES] = extra_yahtzee_score + extra_yahtzee_reward  # noqa
+        # yahtzee bonus
+        if category != Category.YAHTZEE and self.is_eligible_for_yahtzee_bonus():
+            yahtzee_bonus_reward = CONSTANT_SCORES[Category.YAHTZEE_BONUS]
+            reward += yahtzee_bonus_reward
+            yahtzee_bonus_score = self.scores.get(Category.YAHTZEE_BONUS, 0)
+            yahtzee_bonus_score += yahtzee_bonus_reward
+            self.scores[Category.YAHTZEE_BONUS] = yahtzee_bonus_score
 
         return reward
 
-    def is_extra_yahtzee(self):
-        if len(set(self.dice)) == 1 and self.scores.get(Category.YAHTZEE):
+    def is_eligible_for_yahtzee_bonus(self):
+        if self.is_yahtzee() and self.scores.get(Category.YAHTZEE, 0) == 50:
             return True
         return False
 

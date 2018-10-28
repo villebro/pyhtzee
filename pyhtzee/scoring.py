@@ -14,7 +14,7 @@ CONSTANT_SCORES: Dict[Category, int] = {
     Category.SMALL_STRAIGHT: 30,
     Category.LARGE_STRAIGHT: 40,
     Category.YAHTZEE: 50,
-    Category.EXTRA_YAHTZEES: 100,
+    Category.YAHTZEE_BONUS: 100,
     Category.UPPER_SECTION_BONUS: 35,
 }
 
@@ -68,10 +68,6 @@ def score_yahtzee(dice: List[int]) -> int:
     if len(set(dice)) == 1:
         return CONSTANT_SCORES[Category.YAHTZEE]
     return 0
-
-
-def score_extra_yahtzee() -> int:
-    return CONSTANT_SCORES[Category.EXTRA_YAHTZEES]
 
 
 def score_chance(dice: List[int]) -> int:

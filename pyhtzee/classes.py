@@ -19,7 +19,7 @@ class Category(IntEnum):
     YAHTZEE = 11
     CHANCE = 12
     UPPER_SECTION_BONUS = 13
-    EXTRA_YAHTZEES = 14
+    YAHTZEE_BONUS = 14
 
 
 # TODO: add FORCED_JOKER and ORIGINAL_JOKER

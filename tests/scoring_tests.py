@@ -1,5 +1,6 @@
+from pyhtzee.classes import Category
 from pyhtzee.scoring import (
-    score_extra_yahtzee,
+    CONSTANT_SCORES,
     score_upper_section,
     score_x_of_a_kind,
     score_full_house,
@@ -65,7 +66,7 @@ class ScoringTestCase(TestCase):
         self.assertEqual(score_upper_section_bonus(100), 35)
 
     def test_score_extra_yahtzee(self):
-        self.assertEqual(score_extra_yahtzee(), 100)
+        self.assertEqual(CONSTANT_SCORES[Category.YAHTZEE_BONUS], 100)
 
     def test_naive_max_score(self):
         upper_section_score = score_upper_section([1, 1, 1, 1, 1], 1) \
