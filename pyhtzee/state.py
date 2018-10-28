@@ -1,5 +1,5 @@
 from random import Random
-from typing import Dict
+from typing import Dict, List
 
 from pyhtzee.classes import Category, Rule
 from pyhtzee.maps import (
@@ -44,7 +44,7 @@ class State:
 
         # determine if rerolling dice is possible; is so, add all possible permutations
         if self.sub_round < 3:
-            possible_actions.extend(list(range(31)))
+            possible_actions.extend(list(range(CATEGORY_ACTION_OFFSET)))
 
         # See which categories are still unused
         for category in Category:
@@ -102,7 +102,7 @@ class State:
         return reward
 
     def is_eligible_for_yahtzee_bonus(self):
-        if self.is_yahtzee() and self.scores.get(Category.YAHTZEE, 0) == 50:
+        if self.is_yahtzee() and self.scores.get(Category.YAHTZEE, 0) > 0:
             return True
         return False
 
