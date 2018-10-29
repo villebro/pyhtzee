@@ -1,10 +1,16 @@
+import io
+
 from setuptools import find_packages, setup
 
+with io.open('README.md', encoding='utf-8') as f:
+    long_description = f.read()
 
 setup(
     name='pyhtzee',
-    version='1.0.0',
+    version='1.1.0',
     description='Yahtzee game engine',
+    long_description=long_description,
+    long_description_content_type='text/markdown',
     author='Ville Brofeldt',
     author_email='ville.brofeldt@iki.fi',
     maintainer='Ville Brofeldt',
