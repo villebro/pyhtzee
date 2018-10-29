@@ -26,7 +26,7 @@ This shows the dice:
 Next reroll dice 1, 2 and 5:
 
 ```python
-action = dice_roll_to_action_map.get((True, True, False, False, True))
+action = dice_roll_to_action_map[(True, True, False, False, True)]
 pyhtzee.take_action(action)
 print(pyhtzee.dice)
 ```
@@ -40,7 +40,7 @@ Now we have two pairs:
 Let's reroll just the first die to see if we can get a full house:
 
 ```python
-action = dice_roll_to_action_map.get((True, False, False, False, False))
+action = dice_roll_to_action_map[(True, False, False, False, False)]
 pyhtzee.take_action(action)
 print(pyhtzee.dice)
 ```
