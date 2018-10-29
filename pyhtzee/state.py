@@ -2,12 +2,14 @@ from random import Random
 from typing import Dict
 
 from pyhtzee.classes import Category, Rule
-from pyhtzee.maps import (
+from pyhtzee.utils import (
     action_to_category_map,
     action_to_dice_roll_map,
     CATEGORY_ACTION_OFFSET,
     category_to_action_map,
     category_to_scoring_function_map,
+    is_joker_category,
+    is_upper_section_category,
 )
 from pyhtzee.scoring import CONSTANT_SCORES, score_upper_section_bonus
 
@@ -77,29 +79,11 @@ class State:
         self.round += 1
         self.sub_round = 0
 
-        category = action_to_category_map[action]
-        scoring_function = category_to_scoring_function_map[category]
-        reward = scoring_function(self.dice)
-        self.scores[category] = reward
-
-        # upper section
-        if CATEGORY_ACTION_OFFSET <= action <= CATEGORY_ACTION_OFFSET + 5:
-            upper_scores = [v for k, v in self.scores.items()
-                            if int(k) <= int(Category.SIXES)]
-            if len(upper_scores) == 6:
-                bonus_reward = score_upper_section_bonus(sum(filter(None, upper_scores)))
-                self.scores[Category.UPPER_SECTION_BONUS] = bonus_reward
-                reward += bonus_reward
-
-        # yahtzee bonus
-        if category != Category.YAHTZEE and self.is_eligible_for_yahtzee_bonus():
-            yahtzee_bonus_reward = CONSTANT_SCORES[Category.YAHTZEE_BONUS]
-            reward += yahtzee_bonus_reward
-            yahtzee_bonus_score = self.scores.get(Category.YAHTZEE_BONUS, 0)
-            yahtzee_bonus_score += yahtzee_bonus_reward
-            self.scores[Category.YAHTZEE_BONUS] = yahtzee_bonus_score
-
-        return reward
+        scores = self.get_action_score(action)
+        for k, v in scores.items():
+            old_score = self.scores.get(k, 0)
+            self.scores[k] = old_score + v
+        return sum(scores.values())
 
     def is_eligible_for_yahtzee_bonus(self):
         if self.is_yahtzee() and self.scores.get(Category.YAHTZEE, 0) > 0:
@@ -113,4 +97,36 @@ class State:
         return True if self.round == 13 else False
 
     def get_total_score(self):
-        return sum(filter(None, [v for v in self.scores.values()]))
+        return sum([v for v in self.scores.values()])
+
+    def get_action_score(self, action: int) -> Dict[Category, int]:
+        category = action_to_category_map[action]
+        scores: Dict[Category, int] = {}
+
+        # yahtzee bonus
+        if self.is_eligible_for_yahtzee_bonus() and (
+                is_upper_section_category(category) or
+                self.rule == Rule.FREE_CHOICE_JOKER):
+            scores[Category.YAHTZEE_BONUS] = CONSTANT_SCORES[Category.YAHTZEE_BONUS]
+
+        # Joker rule
+        if self.is_eligible_for_yahtzee_bonus() and \
+                self.rule == Rule.FREE_CHOICE_JOKER and \
+                is_joker_category(category):
+            scores[category] = CONSTANT_SCORES[category]
+
+        # Regular rule
+        else:
+            scoring_function = category_to_scoring_function_map[category]
+            scores[category] = scoring_function(self.dice)
+
+        # upper section bonus
+        if is_upper_section_category(category):
+            upper_scores = [v for k, v in self.scores.items()
+                            if int(k) <= int(Category.SIXES)]
+            upper_scores.append(category)
+            if len(upper_scores) == 6:
+                bonus_reward = score_upper_section_bonus(sum(upper_scores))
+                scores[Category.UPPER_SECTION_BONUS] = bonus_reward
+
+        return scores

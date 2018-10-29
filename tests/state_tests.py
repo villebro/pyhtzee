@@ -1,7 +1,7 @@
 from pyhtzee.classes import Category
 from pyhtzee.state import State
-from pyhtzee import maps
-from pyhtzee.maps import (
+from pyhtzee import utils
+from pyhtzee.utils import (
     dice_roll_to_action_map,
     category_to_action_map
 )
@@ -18,21 +18,21 @@ class StateTestCase(TestCase):
     def test_rolling_of_dice(self):
         state = State(seed=123)
         self.assertListEqual([1, 3, 1, 4, 3], state.dice)
-        action = maps.dice_roll_to_action_map[(True, True, True, True, True)]
+        action = utils.dice_roll_to_action_map[(True, True, True, True, True)]
         reward = state.take_action(action)
         self.assertListEqual([1, 1, 4, 5, 5], state.dice)
         self.assertEqual(reward, 0)
-        action = maps.dice_roll_to_action_map[(False, False, False, False, True)]
+        action = utils.dice_roll_to_action_map[(False, False, False, False, True)]
         state.take_action(action)
         self.assertListEqual([1, 1, 4, 5, 3], state.dice)
 
     def test_full_round_four_threes(self):
         state = State(seed=234)
         self.assertListEqual([3, 3, 1, 5, 4], state.dice)
-        action = maps.dice_roll_to_action_map[(False, False, True, True, True)]
+        action = utils.dice_roll_to_action_map[(False, False, True, True, True)]
         state.take_action(action)
         self.assertListEqual([3, 3, 5, 6, 4], state.dice)
-        action = maps.dice_roll_to_action_map[(False, False, True, True, True)]
+        action = utils.dice_roll_to_action_map[(False, False, True, True, True)]
         state.take_action(action)
         self.assertListEqual([3, 3, 2, 3, 3], state.dice)
         action = category_to_action_map[Category.THREES]
@@ -118,5 +118,5 @@ class StateTestCase(TestCase):
         state.take_action(category_to_action_map[Category.LARGE_STRAIGHT])
         state.dice = [6, 6, 6, 6, 6]
         state.take_action(category_to_action_map[Category.CHANCE])
-        self.assertEqual(state.get_total_score(), 1505)
+        self.assertEqual(state.get_total_score(), 1575)
         self.assertTrue(state.is_finished())

@@ -1,5 +1,5 @@
 from pyhtzee.classes import Category
-from pyhtzee.maps import (
+from pyhtzee.utils import (
     action_to_dice_roll_map,
     action_to_category_map,
     dice_roll_to_action_map,

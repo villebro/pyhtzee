@@ -22,8 +22,6 @@ class Category(IntEnum):
     YAHTZEE_BONUS = 14
 
 
-# TODO: add FORCED_JOKER and ORIGINAL_JOKER
 class Rule(Enum):
     REGULAR = 0
     FREE_CHOICE_JOKER = 1
-    FORCED_CHOICE_JOKER = 2

@@ -1,10 +1,10 @@
 """
-Common maps needed for gameplay that make it possible to convert actions (e.g. choosing
+Common utilities needed that make it possible to convert actions (e.g. choosing
 threes on the scorecard) to categories (e.g. full house on the scorecard) and vice versa.
 Similar maps are also provided for mapping dice rolling lists (e.g. reroll dice 2, 3 and
 4 but keep dice 1 and 5) to and from actions and categories to scoring functions.
 """
-from typing import Callable, Dict, Tuple
+from typing import Callable, Dict, List, Tuple
 
 from pyhtzee.classes import Category
 
@@ -44,9 +44,15 @@ for d1 in [1, 0]:
 action_to_category_map: Dict[int, Category] = {}
 category_to_action_map: Dict[Category, int] = {}
 for i in range(13):
-    category = Category(i)
-    action_to_category_map[i + CATEGORY_ACTION_OFFSET] = category
-    category_to_action_map[category] = i + CATEGORY_ACTION_OFFSET
+    category_ = Category(i)
+    action_to_category_map[i + CATEGORY_ACTION_OFFSET] = category_
+    category_to_action_map[category_] = i + CATEGORY_ACTION_OFFSET
+
+# List of actionable categories e.g. for determining valid actions
+actionable_categories: List[Category] = []
+for category_ in Category:
+    if category_ not in (Category.UPPER_SECTION_BONUS, Category.YAHTZEE_BONUS):
+        actionable_categories.append(category_)
 
 # Mapping from category to scoring function
 category_to_scoring_function_map: Dict[int, Callable[..., int]] = {}
@@ -63,3 +69,15 @@ category_to_scoring_function_map[Category.SMALL_STRAIGHT] = lambda x: score_smal
 category_to_scoring_function_map[Category.LARGE_STRAIGHT] = lambda x: score_large_straight(x)  # noqa
 category_to_scoring_function_map[Category.YAHTZEE] = lambda x: score_yahtzee(x)
 category_to_scoring_function_map[Category.CHANCE] = lambda x: score_chance(x)
+
+
+def is_upper_section_category(category: Category) -> bool:
+    return True if int(category) < 6 else False
+
+
+def is_joker_category(category: Category) -> bool:
+    return True if category in [
+        Category.FULL_HOUSE,
+        Category.SMALL_STRAIGHT,
+        Category.LARGE_STRAIGHT
+    ] else False
