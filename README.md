@@ -5,10 +5,65 @@
 [![PyPI](https://img.shields.io/pypi/pyversions/pyhtzee.svg)](https://www.python.org/downloads/)
 # pyhtzee #
 
-Yahtzee game engine. Currently only supports a loose interpretation of the Free 
-Choice Joker Rule, where an extra yahtzee cannot be substituted for a straight and 
-upper section usage isn't enforced for extra yahtzees. The maximum score is 1505, as 
-opposed to 1375 using traditional Joker Rules.
+Yahtzee game engine supporting both regular (maximum 1505) and Joker rules 
+(maximum 1575). Example code:
+
+```python
+from pyhtzee import Pyhtzee
+from pyhtzee.classes import Category, Rule
+from pyhtzee.utils import category_to_action_map, dice_roll_to_action_map
+
+pyhtzee = Pyhtzee(rule=Rule.FREE_CHOICE_JOKER)
+print(pyhtzee.dice)
+```
+
+This shows the dice:
+
+```
+[2, 5, 6, 1, 6]
+```
+
+Next reroll dice 1, 2 and 5:
+
+```python
+action = dice_roll_to_action_map.get((True, True, False, False, True))
+pyhtzee.take_action(action)
+print(pyhtzee.dice)
+```
+
+Now we have two pairs:
+
+```
+[4, 6, 6, 1, 1]
+```
+
+Let's reroll just the first die to see if we can get a full house:
+
+```python
+action = dice_roll_to_action_map.get((True, False, False, False, False))
+pyhtzee.take_action(action)
+print(pyhtzee.dice)
+```
+
+Bingo!
+
+```
+[6, 6, 6, 1, 1]
+```
+
+Now let's choose the action for full house and check the scorecard:
+
+```python
+action = category_to_action_map[Category.FULL_HOUSE]
+reward = pyhtzee.take_action(action)
+print(f'Reward: {reward}, Scorecard: {pyhtzee.scores}')
+```
+
+This shows that we got a reward of 25, which can be confirmed in the scorecard:
+
+```
+Reward: 25, Scorecard: {<Category.FULL_HOUSE: 8>: 25}
+```
 
 ## Developers guide ##
 
