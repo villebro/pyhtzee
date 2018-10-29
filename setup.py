@@ -3,7 +3,7 @@ from setuptools import find_packages, setup
 
 setup(
     name='pyhtzee',
-    version='0.9.0',
+    version='1.0.0',
     description='Yahtzee game engine',
     author='Ville Brofeldt',
     author_email='ville.brofeldt@iki.fi',
