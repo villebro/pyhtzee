@@ -1,7 +1,7 @@
 from random import Random
 from typing import Dict
 
-from pyhtzee.classes import Category, Rule
+from pyhtzee.classes import Category, PyhtzeeException, Rule
 from pyhtzee.utils import (
     action_to_category_map,
     action_to_dice_roll_map,
@@ -66,7 +66,7 @@ class Pyhtzee:
     def take_action(self, action: int) -> int:
         possible_actions = self.get_possible_actions()
         if action not in possible_actions:
-            return 0
+            raise PyhtzeeException('Action not allowed')
 
         # if dice rolling action
         if action < CATEGORY_ACTION_OFFSET:

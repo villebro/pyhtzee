@@ -4,6 +4,10 @@ Common classes needed for gameplay
 from enum import Enum, IntEnum
 
 
+class PyhtzeeException(Exception):
+    pass
+
+
 class Category(IntEnum):
     ACES = 0
     TWOS = 1

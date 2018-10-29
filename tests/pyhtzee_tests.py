@@ -1,4 +1,4 @@
-from pyhtzee.classes import Category, Rule
+from pyhtzee.classes import Category, PyhtzeeException, Rule
 from pyhtzee import Pyhtzee, utils
 from pyhtzee.utils import (
     dice_roll_to_action_map,
@@ -13,6 +13,18 @@ class PyhtzeeTestCase(TestCase):
         pyhtzee = Pyhtzee()
         for die in pyhtzee.dice:
             self.assertTrue(1 <= die <= 6)
+
+    def test_sample_action(self):
+        pyhtzee = Pyhtzee()
+        action = pyhtzee.sample_action()
+        self.assertIn(action, pyhtzee.get_possible_actions())
+
+    def test_invalid_action(self):
+        pyhtzee = Pyhtzee()
+        action = dice_roll_to_action_map[(True, True, True, True, True)]
+        pyhtzee.take_action(action)
+        pyhtzee.take_action(action)
+        self.assertRaises(PyhtzeeException, pyhtzee.take_action, action)
 
     def test_rolling_of_dice(self):
         pyhtzee = Pyhtzee(seed=123)
