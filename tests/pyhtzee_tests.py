@@ -19,6 +19,11 @@ class PyhtzeeTestCase(TestCase):
         action = pyhtzee.sample_action()
         self.assertIn(action, pyhtzee.get_possible_actions())
 
+    def test_zero_action(self):
+        pyhtzee = Pyhtzee(seed=123)
+        pyhtzee.take_action(category_to_action_map[Category.FIVES])
+        self.assertEqual(pyhtzee.scores[Category.FIVES], 0)
+
     def test_invalid_action(self):
         pyhtzee = Pyhtzee()
         action = dice_roll_to_action_map[(True, True, True, True, True)]
