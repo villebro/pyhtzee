@@ -21,4 +21,4 @@ pyflakes==2.0.0           # via flake8
 requests==2.20.0          # via codecov
 six==1.11.0               # via pip-tools
 typed-ast==1.1.0          # via mypy
-urllib3==1.24             # via requests
+urllib3==1.24.1           # via requests
