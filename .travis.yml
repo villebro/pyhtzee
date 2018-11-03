@@ -1,13 +1,20 @@
-language: python
-python:
-  - "3.6"
-install: "pip install -r requirements.txt"
-#before_script:
-#  - cp .env.example .env
-#  - python manage.py migrate
+cache:
+  pip: true
+jobs:
+  include:
+    - language: python
+      python: 3.7
+      env: TOXENV=flake8
+    - language: python
+      python: 3.7
+      env: TOXENV=mypy
+    - language: python
+      python: 3.7
+      env: TOXENV=py37
+install:
+  - pip install --upgrade pip
+  - pip install codecov tox
 script:
-  - flake8
-  - mypy --ignore-missing-imports .
-  - nosetests -v --with-coverage
+  - tox
 after_success:
   codecov
