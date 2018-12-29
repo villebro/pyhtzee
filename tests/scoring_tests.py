@@ -3,9 +3,13 @@ from pyhtzee.scoring import (
     CONSTANT_SCORES,
     score_upper_section,
     score_x_of_a_kind,
+    score_one_pair,
+    score_two_pairs,
     score_full_house,
     score_small_straight,
+    score_small_straight_yatzy,
     score_large_straight,
+    score_large_straight_yatzy,
     score_yahtzee,
     score_chance,
     score_upper_section_bonus,
@@ -31,6 +35,18 @@ class ScoringTestCase(TestCase):
         self.assertEqual(score_x_of_a_kind([1, 2, 2, 3, 6], 4), 0)
         self.assertEqual(score_x_of_a_kind([6, 6, 6, 6, 6], 4), 30)
 
+    def test_score_one_pair(self):
+        self.assertEqual(score_one_pair([1, 1, 2, 3, 4]), 2)
+        self.assertEqual(score_one_pair([1, 1, 2, 2, 3]), 4)
+        self.assertEqual(score_one_pair([1, 1, 6, 6, 6]), 12)
+        self.assertEqual(score_one_pair([1, 2, 3, 4, 5]), 0)
+
+    def test_score_two_pairs(self):
+        self.assertEqual(score_two_pairs([1, 1, 2, 2, 4]), 6)
+        self.assertEqual(score_two_pairs([1, 1, 2, 3, 4]), 0)
+        self.assertEqual(score_two_pairs([2, 3, 2, 3, 2]), 10)
+        self.assertEqual(score_two_pairs([1, 2, 3, 4, 5]), 0)
+
     def test_score_full_house(self):
         self.assertEqual(score_full_house([1, 1, 1, 2, 2]), 25)
         self.assertEqual(score_full_house([1, 1, 1, 2, 3]), 0)
@@ -44,11 +60,24 @@ class ScoringTestCase(TestCase):
         self.assertEqual(score_small_straight([1, 1, 1, 1, 1]), 0)
         self.assertEqual(score_small_straight([1, 2, 3, 5, 4]), 30)
 
+    def test_score_small_straight_yatzy(self):
+        self.assertEqual(score_small_straight_yatzy([1, 3, 2, 5, 4]), 15)
+        self.assertEqual(score_small_straight_yatzy([6, 3, 5, 4, 1]), 0)
+        self.assertEqual(score_small_straight_yatzy([2, 3, 5, 4, 6]), 0)
+        self.assertEqual(score_small_straight_yatzy([1, 1, 1, 1, 1]), 0)
+        self.assertEqual(score_small_straight_yatzy([1, 2, 3, 5, 4]), 15)
+
     def test_score_large_straight(self):
         self.assertEqual(score_large_straight([1, 3, 2, 5, 4]), 40)
         self.assertEqual(score_large_straight([6, 3, 5, 4, 2]), 40)
         self.assertEqual(score_large_straight([2, 3, 5, 4, 2]), 0)
         self.assertEqual(score_large_straight([1, 1, 1, 1, 1]), 0)
+
+    def test_score_large_straight_yatzy(self):
+        self.assertEqual(score_large_straight_yatzy([1, 3, 2, 5, 4]), 0)
+        self.assertEqual(score_large_straight_yatzy([6, 3, 5, 4, 2]), 20)
+        self.assertEqual(score_large_straight_yatzy([2, 3, 5, 4, 2]), 0)
+        self.assertEqual(score_large_straight_yatzy([1, 1, 1, 1, 1]), 0)
 
     def test_score_yahtzee(self):
         self.assertEqual(score_yahtzee([1, 1, 1, 1, 1]), 50)

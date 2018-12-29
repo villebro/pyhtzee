@@ -6,11 +6,13 @@ Similar maps are also provided for mapping dice rolling lists (e.g. reroll dice 
 """
 from typing import Callable, Dict, List, Tuple
 
-from pyhtzee.classes import Category
+from pyhtzee.classes import Category, Rule
 
 from pyhtzee.scoring import (
     score_chance,
     score_full_house,
+    score_one_pair,
+    score_two_pairs,
     score_large_straight,
     score_small_straight,
     score_upper_section,
@@ -43,7 +45,7 @@ for d1 in [1, 0]:
 # Mapping from action id to category and vice versa.
 action_to_category_map: Dict[int, Category] = {}
 category_to_action_map: Dict[Category, int] = {}
-for i in range(13):
+for i in range(15):
     category_ = Category(i)
     action_to_category_map[i + CATEGORY_ACTION_OFFSET] = category_
     category_to_action_map[category_] = i + CATEGORY_ACTION_OFFSET
@@ -62,6 +64,8 @@ category_to_scoring_function_map[Category.THREES] = lambda x: score_upper_sectio
 category_to_scoring_function_map[Category.FOURS] = lambda x: score_upper_section(x, 4)
 category_to_scoring_function_map[Category.FIVES] = lambda x: score_upper_section(x, 5)
 category_to_scoring_function_map[Category.SIXES] = lambda x: score_upper_section(x, 6)
+category_to_scoring_function_map[Category.ONE_PAIR] = lambda x: score_one_pair(x)
+category_to_scoring_function_map[Category.TWO_PAIRS] = lambda x: score_two_pairs(x)
 category_to_scoring_function_map[Category.THREE_OF_A_KIND] = lambda x: score_x_of_a_kind(x, 3)  # noqa
 category_to_scoring_function_map[Category.FOUR_OF_A_KIND] = lambda x: score_x_of_a_kind(x, 4)  # noqa
 category_to_scoring_function_map[Category.FULL_HOUSE] = lambda x: score_full_house(x)
@@ -81,3 +85,10 @@ def is_joker_category(category: Category) -> bool:
         Category.SMALL_STRAIGHT,
         Category.LARGE_STRAIGHT
     ] else False
+
+
+def is_category_supported_by_rule(category: Category, rule: Rule) -> bool:
+    if rule != Rule.YATZY and (category == Category.ONE_PAIR
+                               or category == Category.TWO_PAIRS):
+        return False
+    return True

@@ -45,7 +45,32 @@ def _are_two_sets_equal(a: Set, b: Set) -> bool:
     return a.intersection(b) == a
 
 
+def score_one_pair(dice: List[int]) -> int:
+    pairs: Set[int] = set()
+    for die, count in Counter(dice).most_common():
+        if count >= 2:
+            pairs.add(die)
+    if pairs:
+        sorted_pairs = sorted(pairs, reverse=True)
+        return sorted_pairs[0] * 2
+    return 0
+
+
+def score_two_pairs(dice: List[int]) -> int:
+    pairs: Set[int] = set()
+    for die, count in Counter(dice).most_common():
+        if count >= 2:
+            pairs.add(die)
+    if len(pairs) >= 2:
+        sorted_pairs = sorted(pairs, reverse=True)
+        return sorted_pairs[0] * 2 + sorted_pairs[1] * 2
+    return 0
+
+
 def score_small_straight(dice: List[int]) -> int:
+    """
+    Small straight scoring according to regular yahtzee rules
+    """
     global CONSTANT_SCORES
     dice_set = set(dice)
     if _are_two_sets_equal({1, 2, 3, 4}, dice_set) or \
@@ -55,12 +80,35 @@ def score_small_straight(dice: List[int]) -> int:
     return 0
 
 
+def score_small_straight_yatzy(dice: List[int]) -> int:
+    """
+    Small straight scoring according to yatzy rules
+    """
+    dice_set = set(dice)
+    if _are_two_sets_equal({1, 2, 3, 4, 5}, dice_set):
+        return sum(dice)
+    return 0
+
+
 def score_large_straight(dice: List[int]) -> int:
+    """
+    Large straight scoring according to regular yahtzee rules
+    """
     global CONSTANT_SCORES
     dice_set = set(dice)
     if _are_two_sets_equal({1, 2, 3, 4, 5}, dice_set) or \
             _are_two_sets_equal({2, 3, 4, 5, 6}, dice_set):
         return CONSTANT_SCORES[Category.LARGE_STRAIGHT]
+    return 0
+
+
+def score_large_straight_yatzy(dice: List[int]) -> int:
+    """
+    Large straight scoring according to yatzy rules
+    """
+    dice_set = set(dice)
+    if _are_two_sets_equal({2, 3, 4, 5, 6}, dice_set):
+        return sum(dice)
     return 0
 
 
