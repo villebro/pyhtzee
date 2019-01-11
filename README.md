@@ -6,7 +6,7 @@
 # pyhtzee #
 
 Yahtzee game engine supporting regular Yahtzee rules (maximum 1480), Joker rules 
-(maximum 1575) and Yazty aka. Scandinavian Yahtzee rules (maximum 305). Example code:
+(maximum 1575) and Yatzy aka. Scandinavian Yahtzee rules (maximum 305). Example code:
 
 ```python
 from pyhtzee import Pyhtzee
