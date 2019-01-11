@@ -1,5 +1,5 @@
 from random import Random
-from typing import Dict
+from typing import Callable, Dict, List
 
 from pyhtzee.classes import Category, PyhtzeeException, Rule
 from pyhtzee.utils import (
@@ -7,17 +7,30 @@ from pyhtzee.utils import (
     action_to_dice_roll_map,
     CATEGORY_ACTION_OFFSET,
     category_to_action_map,
-    category_to_scoring_function_map,
     is_joker_category,
     is_upper_section_category,
 )
-from pyhtzee.scoring import CONSTANT_SCORES, score_upper_section_bonus
+from pyhtzee.scoring import (
+    CONSTANT_SCORES_YAHTZEE,
+    score_chance,
+    score_full_house,
+    score_one_pair,
+    score_two_pairs,
+    score_large_straight,
+    score_small_straight,
+    score_upper_section,
+    score_upper_section_bonus,
+    score_x_of_a_kind,
+    score_yahtzee,
+)
 
 
 class Pyhtzee:
     def __init__(self, seed: int = None, rule: Rule = None):
+        self.scoring_functions: Dict[int, Callable[[List[int]], int]] = {}
         self.scores: Dict[Category, int] = {}
-        self.rule = rule if rule else Rule.FREE_CHOICE_JOKER
+        self.rule = rule if rule else Rule.YAHTZEE_FREE_CHOICE_JOKER
+        self.init_scoring_functions()
 
         # a game has a total of 12 rounds
         self.round = 0
@@ -86,7 +99,7 @@ class Pyhtzee:
         return sum(scores.values())
 
     def is_eligible_for_yahtzee_bonus(self):
-        if self.is_yahtzee() and self.scores.get(Category.YAHTZEE, 0) > 0:
+        if self.rule != Rule.YATZY and self.is_yahtzee() and self.scores.get(Category.YAHTZEE, 0) > 0:  # noqa
             return True
         return False
 
@@ -105,15 +118,13 @@ class Pyhtzee:
 
         # yahtzee bonus
         if self.is_eligible_for_yahtzee_bonus():
-            scores[Category.YAHTZEE_BONUS] = CONSTANT_SCORES[Category.YAHTZEE_BONUS]
+            scores[Category.YAHTZEE_BONUS] = CONSTANT_SCORES_YAHTZEE[Category.YAHTZEE_BONUS]  # noqa
 
         # Joker rule
-        if self.is_eligible_for_yahtzee_bonus() and \
-                self.rule == Rule.FREE_CHOICE_JOKER and \
-                is_joker_category(category):
-            scores[category] = CONSTANT_SCORES[category]
+        if self.is_yahtzee() and self.rule == Rule.YAHTZEE_FREE_CHOICE_JOKER and is_joker_category(category):  # noqa
+            scores[category] = CONSTANT_SCORES_YAHTZEE[category]
         else:  # Regular rule
-            scoring_function = category_to_scoring_function_map[category]
+            scoring_function = self.scoring_functions[category]
             scores[category] = scoring_function(self.dice)
 
         # upper section bonus
@@ -122,7 +133,24 @@ class Pyhtzee:
                             if int(k) <= int(Category.SIXES)]
             upper_scores.append(category)
             if len(upper_scores) == 6:
-                bonus_reward = score_upper_section_bonus(sum(upper_scores))
+                bonus_reward = score_upper_section_bonus(sum(upper_scores), self.rule)
                 scores[Category.UPPER_SECTION_BONUS] = bonus_reward
 
         return scores
+
+    def init_scoring_functions(self):
+        self.scoring_functions[Category.ACES] = lambda x: score_upper_section(x, 1)
+        self.scoring_functions[Category.TWOS] = lambda x: score_upper_section(x, 2)
+        self.scoring_functions[Category.THREES] = lambda x: score_upper_section(x, 3)
+        self.scoring_functions[Category.FOURS] = lambda x: score_upper_section(x, 4)
+        self.scoring_functions[Category.FIVES] = lambda x: score_upper_section(x, 5)
+        self.scoring_functions[Category.SIXES] = lambda x: score_upper_section(x, 6)
+        self.scoring_functions[Category.ONE_PAIR] = lambda x: score_one_pair(x)
+        self.scoring_functions[Category.TWO_PAIRS] = lambda x: score_two_pairs(x)
+        self.scoring_functions[Category.THREE_OF_A_KIND] = lambda x: score_x_of_a_kind(x, 3, self.rule)  # noqa
+        self.scoring_functions[Category.FOUR_OF_A_KIND] = lambda x: score_x_of_a_kind(x, 4, self.rule)  # noqa
+        self.scoring_functions[Category.FULL_HOUSE] = lambda x: score_full_house(x, self.rule)  # noqa
+        self.scoring_functions[Category.SMALL_STRAIGHT] = lambda x: score_small_straight(x, self.rule)  # noqa
+        self.scoring_functions[Category.LARGE_STRAIGHT] = lambda x: score_large_straight(x, self.rule)  # noqa
+        self.scoring_functions[Category.YAHTZEE] = lambda x: score_yahtzee(x)
+        self.scoring_functions[Category.CHANCE] = lambda x: score_chance(x)

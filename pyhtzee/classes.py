@@ -29,6 +29,6 @@ class Category(IntEnum):
 
 
 class Rule(Enum):
-    REGULAR = 0
-    FREE_CHOICE_JOKER = 1
+    YAHTZEE = 0
+    YAHTZEE_FREE_CHOICE_JOKER = 1
     YATZY = 2

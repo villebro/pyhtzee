@@ -107,7 +107,7 @@ class PyhtzeeTestCase(TestCase):
         self.assertEqual(pyhtzee.scores[Category.UPPER_SECTION_BONUS], 35)
 
     def test_perfect_joker_score(self):
-        pyhtzee = Pyhtzee(rule=Rule.FREE_CHOICE_JOKER)
+        pyhtzee = Pyhtzee(rule=Rule.YAHTZEE_FREE_CHOICE_JOKER)
         pyhtzee.dice = [6, 6, 6, 6, 6]
         pyhtzee.take_action(category_to_action_map[Category.YAHTZEE])
         pyhtzee.dice = [1, 1, 1, 1, 1]
@@ -137,8 +137,8 @@ class PyhtzeeTestCase(TestCase):
         self.assertEqual(pyhtzee.get_total_score(), 1575)
         self.assertTrue(pyhtzee.is_finished())
 
-    def test_perfect_regular_score(self):
-        pyhtzee = Pyhtzee(rule=Rule.REGULAR)
+    def test_perfect_yahtzee_score(self):
+        pyhtzee = Pyhtzee(rule=Rule.YAHTZEE)
         pyhtzee.dice = [6, 6, 6, 6, 6]
         pyhtzee.take_action(category_to_action_map[Category.YAHTZEE])
         pyhtzee.dice = [1, 1, 1, 1, 1]
@@ -165,5 +165,36 @@ class PyhtzeeTestCase(TestCase):
         pyhtzee.take_action(category_to_action_map[Category.LARGE_STRAIGHT])
         pyhtzee.dice = [6, 6, 6, 6, 6]
         pyhtzee.take_action(category_to_action_map[Category.CHANCE])
-        self.assertEqual(pyhtzee.get_total_score(), 1505)
+        self.assertEqual(pyhtzee.get_total_score(), 1480)
+        self.assertTrue(pyhtzee.is_finished())
+
+    def test_perfect_yahztee_score_with_yatzy_rules(self):
+        pyhtzee = Pyhtzee(rule=Rule.YATZY)
+        pyhtzee.dice = [6, 6, 6, 6, 6]
+        pyhtzee.take_action(category_to_action_map[Category.YAHTZEE])
+        pyhtzee.dice = [1, 1, 1, 1, 1]
+        pyhtzee.take_action(category_to_action_map[Category.ACES])
+        pyhtzee.dice = [2, 2, 2, 2, 2]
+        pyhtzee.take_action(category_to_action_map[Category.TWOS])
+        pyhtzee.dice = [3, 3, 3, 3, 3]
+        pyhtzee.take_action(category_to_action_map[Category.THREES])
+        pyhtzee.dice = [4, 4, 4, 4, 4]
+        pyhtzee.take_action(category_to_action_map[Category.FOURS])
+        pyhtzee.dice = [5, 5, 5, 5, 5]
+        pyhtzee.take_action(category_to_action_map[Category.FIVES])
+        pyhtzee.dice = [6, 6, 6, 6, 6]
+        pyhtzee.take_action(category_to_action_map[Category.SIXES])
+        pyhtzee.dice = [6, 6, 6, 6, 6]
+        pyhtzee.take_action(category_to_action_map[Category.THREE_OF_A_KIND])
+        pyhtzee.dice = [6, 6, 6, 6, 6]
+        pyhtzee.take_action(category_to_action_map[Category.FOUR_OF_A_KIND])
+        pyhtzee.dice = [6, 6, 6, 5, 5]
+        pyhtzee.take_action(category_to_action_map[Category.FULL_HOUSE])
+        pyhtzee.dice = [6, 6, 6, 6, 6]
+        pyhtzee.take_action(category_to_action_map[Category.SMALL_STRAIGHT])
+        pyhtzee.dice = [6, 6, 6, 6, 6]
+        pyhtzee.take_action(category_to_action_map[Category.LARGE_STRAIGHT])
+        pyhtzee.dice = [6, 6, 6, 6, 6]
+        pyhtzee.take_action(category_to_action_map[Category.CHANCE])
+        self.assertEqual(pyhtzee.get_total_score(), 305)
         self.assertTrue(pyhtzee.is_finished())

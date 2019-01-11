@@ -4,7 +4,6 @@ from pyhtzee.utils import (
     action_to_category_map,
     dice_roll_to_action_map,
     category_to_action_map,
-    category_to_scoring_function_map,
 )
 
 from unittest import TestCase
@@ -12,7 +11,6 @@ from unittest import TestCase
 
 class ActionTestCase(TestCase):
     def test_category_function_map(self):
-        self.assertEqual(category_to_scoring_function_map[Category.ACES]([1, 1, 1, 1, 1]), 5)  # noqa
         self.assertTupleEqual(action_to_dice_roll_map[30], (False, False, False, False, True))  # noqa
 
     def test_rolling_action_map(self):

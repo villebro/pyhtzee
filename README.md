@@ -5,8 +5,8 @@
 [![PyPI](https://img.shields.io/pypi/pyversions/pyhtzee.svg)](https://www.python.org/downloads/)
 # pyhtzee #
 
-Yahtzee game engine supporting both regular (maximum 1505) and Joker rules 
-(maximum 1575). Example code:
+Yahtzee game engine supporting regular Yahtzee rules (maximum 1480), Joker rules 
+(maximum 1575) and Yazty aka. Scandinavian Yahtzee rules (maximum 305). Example code:
 
 ```python
 from pyhtzee import Pyhtzee
