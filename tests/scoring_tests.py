@@ -1,7 +1,6 @@
 from pyhtzee.classes import Category, Rule
 from pyhtzee.scoring import (
     CONSTANT_SCORES_YAHTZEE,
-    CONSTANT_SCORES_YATZY,
     score_upper_section,
     score_x_of_a_kind,
     score_one_pair,

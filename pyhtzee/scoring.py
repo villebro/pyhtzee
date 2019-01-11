@@ -138,7 +138,6 @@ def score_large_straight_yahtzee(dice: List[int]) -> int:
     dice_set = set(dice)
     if _are_two_sets_equal({1, 2, 3, 4, 5}, dice_set) or \
             _are_two_sets_equal({2, 3, 4, 5, 6}, dice_set):
-        x = CONSTANT_SCORES_YAHTZEE[Category.LARGE_STRAIGHT]
         return CONSTANT_SCORES_YAHTZEE[Category.LARGE_STRAIGHT]
     return 0
 
