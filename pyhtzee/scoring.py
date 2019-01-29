@@ -33,13 +33,12 @@ def score_upper_section(dice: List[int], face: int) -> int:
 def score_x_of_a_kind(dice: List[int], min_same_faces: int, rule: Rule) -> int:
     if rule == Rule.YATZY:
         return score_x_of_a_kind_yatzy(dice, min_same_faces)
-    else:
-        return score_x_of_a_kind_yahtzee(dice, min_same_faces)
+    return score_x_of_a_kind_yahtzee(dice, min_same_faces)
 
 
 def score_x_of_a_kind_yahtzee(dice: List[int], min_same_faces: int) -> int:
     """Return sum of dice if there are a minimum of equal min_same_faces dice, otherwise
-    return zero.
+    return zero. Only works for 3 or more min_same_faces.
     """
     for die, count in Counter(dice).most_common(1):
         if count >= min_same_faces:
@@ -62,8 +61,7 @@ def score_full_house(dice: List[int], rule: Rule) -> int:
     if len(counter.keys()) == 2 and min(counter.values()) == 2:
         if rule == Rule.YATZY:
             return sum(dice)
-        else:
-            return CONSTANT_SCORES_YAHTZEE[Category.FULL_HOUSE]
+        return CONSTANT_SCORES_YAHTZEE[Category.FULL_HOUSE]
     return 0
 
 
@@ -96,8 +94,7 @@ def score_two_pairs(dice: List[int]) -> int:
 def score_small_straight(dice: List[int], rule: Rule) -> int:
     if rule == Rule.YATZY:
         return score_small_straight_yatzy(dice)
-    else:
-        return score_small_straight_yahztee(dice)
+    return score_small_straight_yahztee(dice)
 
 
 def score_small_straight_yahztee(dice: List[int]) -> int:
