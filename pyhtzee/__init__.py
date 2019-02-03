@@ -63,7 +63,7 @@ class Pyhtzee:
 
         # See which categories are still unused
         for category in Category:
-            if not self.scores.get(category):
+            if self.scores.get(category) is None:
                 action = category_to_action_map.get(category)
                 # Check if the category has an action associated with it
                 # (upper section bonus is automatic).
