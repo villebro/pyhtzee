@@ -35,7 +35,7 @@ class PyhtzeeTestCase(TestCase):
             category_to_action_map[Category.FULL_HOUSE],
             category_to_action_map[Category.SMALL_STRAIGHT],
             category_to_action_map[Category.LARGE_STRAIGHT],
-            ]
+        ]
 
         expected_final_possible_actions = initial_possible_actions
         for action in actions:
