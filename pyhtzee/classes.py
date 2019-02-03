@@ -15,15 +15,15 @@ class Category(IntEnum):
     FOURS = 3
     FIVES = 4
     SIXES = 5
-    ONE_PAIR = 6
-    TWO_PAIRS = 7
-    THREE_OF_A_KIND = 8
-    FOUR_OF_A_KIND = 9
-    FULL_HOUSE = 10
-    SMALL_STRAIGHT = 11
-    LARGE_STRAIGHT = 12
-    YAHTZEE = 13
-    CHANCE = 14
+    THREE_OF_A_KIND = 6
+    FOUR_OF_A_KIND = 7
+    FULL_HOUSE = 8
+    SMALL_STRAIGHT = 9
+    LARGE_STRAIGHT = 10
+    YAHTZEE = 11
+    CHANCE = 12
+    ONE_PAIR = 13
+    TWO_PAIRS = 14
     UPPER_SECTION_BONUS = 15
     YAHTZEE_BONUS = 16
 
