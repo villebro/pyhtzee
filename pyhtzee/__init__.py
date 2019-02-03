@@ -57,18 +57,22 @@ class Pyhtzee:
     def get_possible_actions(self):
         possible_actions = []
 
-        # determine if rerolling dice is possible; is so, add all possible permutations
-        if self.sub_round < 3:
-            possible_actions.extend(list(range(CATEGORY_ACTION_OFFSET)))
+        if self.round <= 12 or self.round <= 14 and self.rule == Rule.YATZY:
+            # determine if rerolling dice is possible; is so add all possible permutations
+            if self.sub_round < 3:
+                possible_actions.extend(list(range(CATEGORY_ACTION_OFFSET)))
 
-        # See which categories are still unused
-        for category in Category:
-            if self.scores.get(category) is None:
-                action = category_to_action_map.get(category)
-                # Check if the category has an action associated with it
-                # (upper section bonus is automatic).
-                if action:
-                    possible_actions.append(action)
+            # See which actionable categories are still unused
+            for category in Category:
+                if self.scores.get(category) is None:
+                    # Pairs are not valid categories in regular Yahtzee, only in Yatzy
+                    if self.rule != Rule.YATZY and category in (Category.ONE_PAIR, Category.TWO_PAIRS):  # noqa
+                        continue
+                    action = category_to_action_map.get(category)
+                    # Check if the category has an action associated with it
+                    # (upper section bonus is automatic).
+                    if action:
+                        possible_actions.append(action)
 
         return possible_actions
 

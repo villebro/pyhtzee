@@ -33,16 +33,17 @@ for d1 in [1, 0]:
 # Mapping from action id to category and vice versa.
 action_to_category_map: Dict[int, Category] = {}
 category_to_action_map: Dict[Category, int] = {}
-for i in range(15):
-    category_ = Category(i)
-    action_to_category_map[i + CATEGORY_ACTION_OFFSET] = category_
-    category_to_action_map[category_] = i + CATEGORY_ACTION_OFFSET
+for i, category in enumerate(Category):
+    if category in (Category.UPPER_SECTION_BONUS, Category.YAHTZEE_BONUS):
+        continue
+    action_to_category_map[i + CATEGORY_ACTION_OFFSET] = category
+    category_to_action_map[category] = i + CATEGORY_ACTION_OFFSET
 
 # List of actionable categories e.g. for determining valid actions
 actionable_categories: List[Category] = []
-for category_ in Category:
-    if category_ not in (Category.UPPER_SECTION_BONUS, Category.YAHTZEE_BONUS):
-        actionable_categories.append(category_)
+for category in Category:
+    if category not in (Category.UPPER_SECTION_BONUS, Category.YAHTZEE_BONUS):
+        actionable_categories.append(category)
 
 
 def is_upper_section_category(category: Category) -> bool:

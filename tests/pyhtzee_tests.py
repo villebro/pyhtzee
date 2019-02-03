@@ -19,8 +19,8 @@ class PyhtzeeTestCase(TestCase):
         action = pyhtzee.sample_action()
         self.assertIn(action, pyhtzee.get_possible_actions())
 
-    def test_possible_actions(self):
-        pyhtzee = Pyhtzee()
+    def test_possible_actions_yahtzee(self):
+        pyhtzee = Pyhtzee(rule=Rule.YAHTZEE)
         initial_possible_actions = pyhtzee.get_possible_actions()
         actions = [
             category_to_action_map[Category.YAHTZEE],
@@ -37,7 +37,35 @@ class PyhtzeeTestCase(TestCase):
             category_to_action_map[Category.LARGE_STRAIGHT],
         ]
 
-        expected_final_possible_actions = initial_possible_actions
+        expected_final_possible_actions = list(initial_possible_actions)
+        for action in actions:
+            pyhtzee.take_action(action)
+            expected_final_possible_actions.remove(action)
+
+        final_possible_actions = pyhtzee.get_possible_actions()
+        self.assertListEqual(final_possible_actions, expected_final_possible_actions)
+
+    def test_possible_actions_yatzy(self):
+        pyhtzee = Pyhtzee(rule=Rule.YATZY)
+        initial_possible_actions = pyhtzee.get_possible_actions()
+        actions = [
+            category_to_action_map[Category.YAHTZEE],
+            category_to_action_map[Category.ACES],
+            category_to_action_map[Category.TWOS],
+            category_to_action_map[Category.THREES],
+            category_to_action_map[Category.FOURS],
+            category_to_action_map[Category.FIVES],
+            category_to_action_map[Category.SIXES],
+            category_to_action_map[Category.ONE_PAIR],
+            category_to_action_map[Category.TWO_PAIRS],
+            category_to_action_map[Category.THREE_OF_A_KIND],
+            category_to_action_map[Category.FOUR_OF_A_KIND],
+            category_to_action_map[Category.FULL_HOUSE],
+            category_to_action_map[Category.SMALL_STRAIGHT],
+            category_to_action_map[Category.LARGE_STRAIGHT],
+        ]
+
+        expected_final_possible_actions = list(initial_possible_actions)
         for action in actions:
             pyhtzee.take_action(action)
             expected_final_possible_actions.remove(action)
