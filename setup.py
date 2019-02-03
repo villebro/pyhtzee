@@ -7,7 +7,7 @@ with io.open('README.md', encoding='utf-8') as f:
 
 setup(
     name='pyhtzee',
-    version='1.2.3',
+    version='1.2.4',
     description='Yahtzee game engine',
     long_description=long_description,
     long_description_content_type='text/markdown',
