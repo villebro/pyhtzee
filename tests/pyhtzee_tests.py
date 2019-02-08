@@ -73,11 +73,6 @@ class PyhtzeeTestCase(TestCase):
         final_possible_actions = pyhtzee.get_possible_actions()
         self.assertListEqual(final_possible_actions, expected_final_possible_actions)
 
-    def test_zero_action(self):
-        pyhtzee = Pyhtzee(seed=123)
-        pyhtzee.take_action(category_to_action_map[Category.FIVES])
-        self.assertEqual(pyhtzee.scores[Category.FIVES], 0)
-
     def test_invalid_action(self):
         pyhtzee = Pyhtzee()
         action = dice_roll_to_action_map[(True, True, True, True, True)]
@@ -87,59 +82,20 @@ class PyhtzeeTestCase(TestCase):
 
     def test_rolling_of_dice(self):
         pyhtzee = Pyhtzee(seed=123)
-        self.assertListEqual([1, 3, 1, 4, 3], pyhtzee.dice)
+        original_dice = tuple(pyhtzee.dice)
+        # This is a bad test; it is perfectly possible to get the exact
+        # same dice twice despite full reroll
         action = utils.dice_roll_to_action_map[(True, True, True, True, True)]
-        reward = pyhtzee.take_action(action)
-        self.assertListEqual([1, 1, 4, 5, 5], pyhtzee.dice)
-        self.assertEqual(reward, 0)
+        pyhtzee.take_action(action)
+        self.assertNotEqual(original_dice, tuple(pyhtzee.dice))
+        # This test makes more sense; make sure first four dice aren't rerolled
+        original_dice = tuple(pyhtzee.dice)
         action = utils.dice_roll_to_action_map[(False, False, False, False, True)]
         pyhtzee.take_action(action)
-        self.assertListEqual([1, 1, 4, 5, 3], pyhtzee.dice)
-
-    def test_full_round_four_threes(self):
-        pyhtzee = Pyhtzee(seed=234)
-        self.assertListEqual([3, 3, 1, 5, 4], pyhtzee.dice)
-        action = utils.dice_roll_to_action_map[(False, False, True, True, True)]
-        pyhtzee.take_action(action)
-        self.assertListEqual([3, 3, 5, 6, 4], pyhtzee.dice)
-        action = utils.dice_roll_to_action_map[(False, False, True, True, True)]
-        pyhtzee.take_action(action)
-        self.assertListEqual([3, 3, 2, 3, 3], pyhtzee.dice)
-        action = category_to_action_map[Category.THREES]
-        reward = pyhtzee.take_action(action)
-        self.assertEqual(reward, 12)
-        self.assertEqual(pyhtzee.scores[Category.THREES], reward)
-
-    def test_full_round_unsuccessful_yahtzee(self):
-        pyhtzee = Pyhtzee(seed=234)
-        self.assertListEqual([3, 3, 1, 5, 4], pyhtzee.dice)
-        action = category_to_action_map[Category.YAHTZEE]
-        reward = pyhtzee.take_action(action)
-        self.assertEqual(reward, 0)
-        self.assertEqual(pyhtzee.scores[Category.YAHTZEE], reward)
-
-    def test_completing_roung(self):
-        pyhtzee = Pyhtzee(seed=345)
-        action = dice_roll_to_action_map[(True, True, True, True, True)]
-        pyhtzee.take_action(action)
-        pyhtzee.take_action(action)
-        self.assertListEqual([3, 4, 6, 3, 1], pyhtzee.dice)
-
-    def test_full_round_successful_yahtzee(self):
-        pyhtzee = Pyhtzee()
-        pyhtzee.dice = [1, 1, 1, 1, 1]
-        action = category_to_action_map[Category.YAHTZEE]
-        reward = pyhtzee.take_action(action)
-        self.assertEqual(reward, 50)
-        self.assertEqual(pyhtzee.scores[Category.YAHTZEE], reward)
-
-    def test_full_round_successful_chance(self):
-        pyhtzee = Pyhtzee()
-        pyhtzee.dice = [6, 6, 6, 6, 5]
-        action = category_to_action_map[Category.CHANCE]
-        reward = pyhtzee.take_action(action)
-        self.assertEqual(reward, 29)
-        self.assertEqual(pyhtzee.scores[Category.CHANCE], reward)
+        self.assertEqual(original_dice[0], pyhtzee.dice[0])
+        self.assertEqual(original_dice[1], pyhtzee.dice[1])
+        self.assertEqual(original_dice[2], pyhtzee.dice[2])
+        self.assertEqual(original_dice[3], pyhtzee.dice[3])
 
     def test_upper_section_bonus(self):
         pyhtzee = Pyhtzee()

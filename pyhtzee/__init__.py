@@ -91,16 +91,16 @@ class Pyhtzee:
             self.roll_dice(*action_to_dice_roll_map[action])
             return 0
 
+        scores = self.get_action_score(action)
+        for k, v in scores.items():
+            old_score = self.scores.get(k, 0)
+            self.scores[k] = old_score + v
+
         # all non-rolling actions lead to the sub-round
         # ending and moving to the next round and rerolling all dice
         self.round += 1
         self.sub_round = 0
         self.roll_dice(True, True, True, True, True)
-
-        scores = self.get_action_score(action)
-        for k, v in scores.items():
-            old_score = self.scores.get(k, 0)
-            self.scores[k] = old_score + v
         return sum(scores.values())
 
     def is_eligible_for_yahtzee_bonus(self):
