@@ -92,9 +92,10 @@ class Pyhtzee:
             return 0
 
         # all non-rolling actions lead to the sub-round
-        # ending and moving to the next round
+        # ending and moving to the next round and rerolling all dice
         self.round += 1
         self.sub_round = 0
+        self.roll_dice(True, True, True, True, True)
 
         scores = self.get_action_score(action)
         for k, v in scores.items():
