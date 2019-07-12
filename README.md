@@ -5,7 +5,7 @@
 [![PyPI](https://img.shields.io/pypi/pyversions/pyhtzee.svg)](https://www.python.org/downloads/)
 # pyhtzee #
 
-Yahtzee game engine supporting regular Yahtzee rules (maximum 1480), Joker rules 
+Yahtzee game engine supporting regular Yahtzee rules (maximum 1480), Joker rules
 (maximum 1575) and Yatzy aka. Scandinavian Yahtzee rules (maximum 305). Example code:
 
 ```python
@@ -89,4 +89,12 @@ pipenv shell
 
 ```bash
 pip-compile -U --output-file requirements.txt setup.py requirements-dev.in
+```
+
+### Pre-commit hooks ###
+
+This project uses Git pre-commit hooks courtesy of [pre-commit](https://pre-commit.com/). To install run the following:
+
+```bash
+pre-commit install
 ```
