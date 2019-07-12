@@ -9,9 +9,7 @@ from typing import Dict, List, Set
 
 from pyhtzee.classes import Category, Rule
 
-CONSTANT_SCORES: Dict[Category, int] = {
-    Category.YAHTZEE: 50,
-}
+CONSTANT_SCORES: Dict[Category, int] = {Category.YAHTZEE: 50}
 
 CONSTANT_SCORES_YAHTZEE: Dict[Category, int] = {
     Category.FULL_HOUSE: 25,
@@ -21,9 +19,7 @@ CONSTANT_SCORES_YAHTZEE: Dict[Category, int] = {
     Category.UPPER_SECTION_BONUS: 35,
 }
 
-CONSTANT_SCORES_YATZY: Dict[Category, int] = {
-    Category.UPPER_SECTION_BONUS: 50,
-}
+CONSTANT_SCORES_YATZY: Dict[Category, int] = {Category.UPPER_SECTION_BONUS: 50}
 
 
 def score_upper_section(dice: List[int], face: int) -> int:
@@ -103,9 +99,11 @@ def score_small_straight_yahztee(dice: List[int]) -> int:
     """
     global CONSTANT_SCORES_YAHTZEE
     dice_set = set(dice)
-    if _are_two_sets_equal({1, 2, 3, 4}, dice_set) or \
-            _are_two_sets_equal({2, 3, 4, 5}, dice_set) or \
-            _are_two_sets_equal({3, 4, 5, 6}, dice_set):
+    if (
+        _are_two_sets_equal({1, 2, 3, 4}, dice_set)
+        or _are_two_sets_equal({2, 3, 4, 5}, dice_set)
+        or _are_two_sets_equal({3, 4, 5, 6}, dice_set)
+    ):
         return CONSTANT_SCORES_YAHTZEE[Category.SMALL_STRAIGHT]
     return 0
 
@@ -133,8 +131,9 @@ def score_large_straight_yahtzee(dice: List[int]) -> int:
     """
     global CONSTANT_SCORES_YAHTZEE
     dice_set = set(dice)
-    if _are_two_sets_equal({1, 2, 3, 4, 5}, dice_set) or \
-            _are_two_sets_equal({2, 3, 4, 5, 6}, dice_set):
+    if _are_two_sets_equal({1, 2, 3, 4, 5}, dice_set) or _are_two_sets_equal(
+        {2, 3, 4, 5, 6}, dice_set
+    ):
         return CONSTANT_SCORES_YAHTZEE[Category.LARGE_STRAIGHT]
     return 0
 

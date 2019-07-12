@@ -22,7 +22,13 @@ for d1 in [1, 0]:
             for d4 in [1, 0]:
                 for d5 in [1, 0]:
                     # make rolling all dice the first action, i.e. zero
-                    key = 31 - (d5 * 2**0 + d4 * 2**1 + d3 * 2**2 + d2 * 2**3 + d1 * 2**4)
+                    key = 31 - (
+                        d5 * 2 ** 0
+                        + d4 * 2 ** 1
+                        + d3 * 2 ** 2
+                        + d2 * 2 ** 3
+                        + d1 * 2 ** 4
+                    )
                     value = bool(d1), bool(d2), bool(d3), bool(d4), bool(d5)
                     # not rolling any dice is not a valid action
                     if key < 31:
@@ -51,15 +57,17 @@ def is_upper_section_category(category: Category) -> bool:
 
 
 def is_joker_category(category: Category) -> bool:
-    return True if category in [
-        Category.FULL_HOUSE,
-        Category.SMALL_STRAIGHT,
-        Category.LARGE_STRAIGHT
-    ] else False
+    return (
+        True
+        if category
+        in [Category.FULL_HOUSE, Category.SMALL_STRAIGHT, Category.LARGE_STRAIGHT]
+        else False
+    )
 
 
 def is_category_supported_by_rule(category: Category, rule: Rule) -> bool:
-    if rule != Rule.YATZY and (category == Category.ONE_PAIR
-                               or category == Category.TWO_PAIRS):
+    if rule != Rule.YATZY and (
+        category == Category.ONE_PAIR or category == Category.TWO_PAIRS
+    ):
         return False
     return True

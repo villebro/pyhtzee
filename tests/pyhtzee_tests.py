@@ -1,9 +1,6 @@
 from pyhtzee.classes import Category, PyhtzeeException, Rule
 from pyhtzee import Pyhtzee, utils
-from pyhtzee.utils import (
-    dice_roll_to_action_map,
-    category_to_action_map
-)
+from pyhtzee.utils import dice_roll_to_action_map, category_to_action_map
 
 from unittest import TestCase
 

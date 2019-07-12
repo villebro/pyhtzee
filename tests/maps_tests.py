@@ -11,7 +11,9 @@ from unittest import TestCase
 
 class ActionTestCase(TestCase):
     def test_category_function_map(self):
-        self.assertTupleEqual(action_to_dice_roll_map[30], (False, False, False, False, True))  # noqa
+        self.assertTupleEqual(
+            action_to_dice_roll_map[30], (False, False, False, False, True)
+        )  # noqa
 
     def test_rolling_action_map(self):
         start_action_1 = 0

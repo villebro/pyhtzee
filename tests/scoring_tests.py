@@ -132,24 +132,28 @@ class ScoringTestCase(TestCase):
 
     def test_naive_max_score_yahtzee(self):
         rule = Rule.YAHTZEE
-        upper_section_score = score_upper_section([1, 1, 1, 1, 1], 1) \
-            + score_upper_section([2, 2, 2, 2, 2], 2) \
-            + score_upper_section([3, 3, 3, 3, 3], 3) \
-            + score_upper_section([4, 4, 4, 4, 4], 4) \
-            + score_upper_section([5, 5, 5, 5, 5], 5) \
+        upper_section_score = (
+            score_upper_section([1, 1, 1, 1, 1], 1)
+            + score_upper_section([2, 2, 2, 2, 2], 2)
+            + score_upper_section([3, 3, 3, 3, 3], 3)
+            + score_upper_section([4, 4, 4, 4, 4], 4)
+            + score_upper_section([5, 5, 5, 5, 5], 5)
             + score_upper_section([6, 6, 6, 6, 6], 6)
+        )
         upper_section_bonus = score_upper_section_bonus(upper_section_score, rule)
-        lower_section_score = score_x_of_a_kind([6, 6, 6, 6, 6], 3, rule) \
-            + score_x_of_a_kind([6, 6, 6, 6, 6], 4, rule) \
-            + score_full_house([6, 6, 6, 5, 5], rule) \
-            + score_small_straight([1, 2, 3, 4, 5], rule) \
-            + score_large_straight([1, 2, 3, 4, 5], rule) \
-            + score_yahtzee([6, 6, 6, 6, 6]) \
+        lower_section_score = (
+            score_x_of_a_kind([6, 6, 6, 6, 6], 3, rule)
+            + score_x_of_a_kind([6, 6, 6, 6, 6], 4, rule)
+            + score_full_house([6, 6, 6, 5, 5], rule)
+            + score_small_straight([1, 2, 3, 4, 5], rule)
+            + score_large_straight([1, 2, 3, 4, 5], rule)
+            + score_yahtzee([6, 6, 6, 6, 6])
             + score_chance([6, 6, 6, 6, 6])
+        )
 
         self.assertEqual(upper_section_score, 105)
         self.assertEqual(upper_section_bonus, 35)
         self.assertEqual(lower_section_score, 235)
-        self.assertEqual(upper_section_score
-                         + upper_section_bonus
-                         + lower_section_score, 375)
+        self.assertEqual(
+            upper_section_score + upper_section_bonus + lower_section_score, 375
+        )
