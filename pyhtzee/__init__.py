@@ -1,5 +1,5 @@
 from random import Random
-from typing import Callable, Dict, List
+from typing import Callable, Dict, List, Tuple, Union
 
 from pyhtzee.classes import Category, PyhtzeeException, Rule
 from pyhtzee.utils import (
@@ -54,7 +54,7 @@ class Pyhtzee:
             if die:
                 self.dice[i] = self.rnd.choice([1, 2, 3, 4, 5, 6])
 
-    def get_possible_actions(self):
+    def get_possible_actions(self) -> List[int]:
         possible_actions = []
 
         if self.round <= 12 or self.round <= 14 and self.rule == Rule.YATZY:
@@ -142,6 +142,11 @@ class Pyhtzee:
                 scores[Category.UPPER_SECTION_BONUS] = bonus_reward
 
         return scores
+
+    @staticmethod
+    def get_verbose_action(action: int) -> Union[Tuple[bool, bool, bool, bool, bool],
+                                                 Category]:
+        return action_to_category_map.get(action) or action_to_dice_roll_map.get(action)
 
     def init_scoring_functions(self):
         self.scoring_functions[Category.ACES] = lambda x: score_upper_section(x, 1)
