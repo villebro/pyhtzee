@@ -3,3 +3,4 @@ flake8
 nose
 mypy
 pip-tools
+pre-commit
