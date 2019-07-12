@@ -145,7 +145,7 @@ class Pyhtzee:
 
     @staticmethod
     def get_verbose_action(action: int) -> Union[Tuple[bool, bool, bool, bool, bool],
-                                                 Category]:
+                                                 Category, None]:
         return action_to_category_map.get(action) or action_to_dice_roll_map.get(action)
 
     def init_scoring_functions(self):
