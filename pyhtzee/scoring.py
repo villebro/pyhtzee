@@ -1,3 +1,4 @@
+# asdf
 """
 Scoring functions for lists with five dice. All functions (except upper sectino bonus)
 are given a a list of ints representing the number of dots on the face. If the list of
